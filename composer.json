@@ -1,0 +1,37 @@
+{
+    "name": "darinlarimore/statamic-stripe-form-field",
+    "autoload": {
+        "psr-4": {
+            "Darinlarimore\\StatamicStripeFormField\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Darinlarimore\\StatamicStripeFormField\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "statamic/cms": "^5.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Statamic Stripe Form Field",
+            "description": "Statamic Stripe Form Field addon"
+        },
+        "laravel": {
+            "providers": [
+                "Darinlarimore\\StatamicStripeFormField\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
