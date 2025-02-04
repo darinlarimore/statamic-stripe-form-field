@@ -19,103 +19,107 @@ class StripeForm extends Fieldtype
         return 'statamic-stripe-form-field::forms.fields.stripe_form_field';
     }
 
+    public function extraRenderableFieldData(): array
+    {
+        return [
+            'api_key' => config('statamic-stripe-form-field.key'),
+            'amount' => $this->config('amount'),
+            'currency' => $this->config('currency'),
+        ];
+    }
+
+
     protected function configFieldItems(): array
     {
         return [
 
-            [
-                'display' => __('Payment Type'),
-                'fields' => [
-                    'payment_type' => [
-                        'display' => 'Payment Type',
-                        'instructions' => 'Choose the type of payment form you want to display.',
-                        'type' => 'select',
-                        'default' => 'once_off',
-                        'options' => [
-                            'once_off' => __('Once Off'),
-                            'subscription' => __('Subscription'),
-                        ],
-                    ],
-                    'subscription_interval' => [
-                        'display' => 'Subscription Interval',
-                        'instructions' => 'Choose the interval of the subscription payments.',
-                        'type' => 'text',
-                        'input_type' => 'number',
-                        'default' => 1,
-                        'validate' => 'required|numeric',
-                        'if' => [
-                            'payment_type' => 'subscription',
-                        ],
-                    ],
-                    'subscription_frequency' => [
-                        'display' => 'Subscription Frequency',
-                        'instructions' => 'Choose the frequency of the subscription payments.',
-                        'type' => 'select',
-                        'default' => 'month',
-                        'options' => [
-                            'day' => __('Day'),
-                            'week' => __('Week'),
-                            'month' => __('Month'),
-                            'year' => __('Year'),
-                        ],
-                        'if' => [
-                            'payment_type' => 'subscription',
-                        ],
-                    ],
-                    'subscription_description' => [
-                        'display' => 'Subscription Description',
-                        'instructions' => 'Enter a description for the subscription. This will only be shown in Stripe.',
-                        'type' => 'text',
-                        'if' => [
-                            'payment_type' => 'subscription',
-                        ],
-                    ],
+            'payment_type' => [
+                'display' => 'Payment Type',
+                'instructions' => 'Choose the type of payment form you want to display.',
+                'type' => 'select',
+                'default' => 'once_off',
+                'options' => [
+                    'once_off' => __('Once Off'),
+                    'subscription' => __('Subscription'),
                 ],
             ],
-            [
-                'display' => __('Payment Details'),
-                'fields' => [
-                    'amount' => [
-                        'display' => 'Amount',
-                        'instructions' => 'The amount to charge the customer.',
-                        'type' => 'text',
-                        'input_type' => 'number',
-                        'placeholder' => '0',
-                        'validate' => [
-                            'numeric',
-                            'min:0',
-                            'max:99999',
-                            'required'
-                        ],
-                    ],
-                    'currency' => [
-                        'display' => 'Currency',
-                        'instructions' => 'A three-letter <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank">ISO currency code</a> supported by Stripe.',
-                        'type' => 'text',
-                        'default' => 'USD',
-                        'validate' => 'required',
-                    ],
-                    'payment_description' => [
-                        'display' => 'Payment Description',
-                        'instructions' => 'Enter a description for this payment, to appear against the transaction in your Stripe account, and on the payment receipt sent to the customer.',
-                        'type' => 'text',
-                    ],
-                    'payment_receipt' => [
-                        'display' => 'Payment Receipt',
-                        'instructions' => 'Whether Stripe should email a receipt to the customer on successful payment.',
-                        'type' => 'toggle',
-                        'default' => true,
-                    ],
-                    'receipt_email_field_handle' => [
-                        'display' => 'Receipt Email Field Handle',
-                        'instructions' => 'The field handle of the email field in your form that should be used to send the payment receipt to the customer.',
-                        'type' => 'text',
-                        'if' => [
-                            'payment_receipt' => true,
-                        ],
-                    ],
+            'subscription_interval' => [
+                'display' => 'Subscription Interval',
+                'instructions' => 'Choose the interval of the subscription payments.',
+                'type' => 'text',
+                'input_type' => 'number',
+                'default' => 1,
+                'validate' => 'required|numeric',
+                'if' => [
+                    'payment_type' => 'subscription',
                 ],
-            ]
+            ],
+            'subscription_frequency' => [
+                'display' => 'Subscription Frequency',
+                'instructions' => 'Choose the frequency of the subscription payments.',
+                'type' => 'select',
+                'default' => 'month',
+                'options' => [
+                    'day' => __('Day'),
+                    'week' => __('Week'),
+                    'month' => __('Month'),
+                    'year' => __('Year'),
+                ],
+                'if' => [
+                    'payment_type' => 'subscription',
+                ],
+            ],
+            'subscription_description' => [
+                'display' => 'Subscription Description',
+                'instructions' => 'Enter a description for the subscription. This will only be shown in Stripe.',
+                'type' => 'text',
+                'if' => [
+                    'payment_type' => 'subscription',
+                ],
+            ],
+
+            'amount' => [
+                'display' => 'Amount',
+                'instructions' => 'The amount to charge the customer.',
+                'type' => 'text',
+                'input_type' => 'number',
+                'placeholder' => '0',
+                'validate' => [
+                    'numeric',
+                    'min:0',
+                    'max:99999',
+                    'required'
+                ],
+            ],
+            'currency' => [
+                'display' => 'Currency',
+                'instructions' => 'A three-letter <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank">ISO currency code</a> supported by Stripe.',
+                'type' => 'text',
+                'default' => 'USD',
+                'validate' => [
+                    'required',
+                    'size:3',
+                ],
+            ],
+            'payment_description' => [
+                'display' => 'Payment Description',
+                'instructions' => 'Enter a description for this payment, to appear against the transaction in your Stripe account, and on the payment receipt sent to the customer.',
+                'type' => 'text',
+            ],
+            'payment_receipt' => [
+                'display' => 'Payment Receipt',
+                'instructions' => 'Whether Stripe should email a receipt to the customer on successful payment.',
+                'type' => 'toggle',
+                'default' => true,
+            ],
+            'receipt_email_field_handle' => [
+                'display' => 'Receipt Email Field Handle',
+                'instructions' => 'The field handle of the email field in your form that should be used to send the payment receipt to the customer.',
+                'type' => 'text',
+                'if' => [
+                    'payment_receipt' => true,
+                ],
+            ],
         ];
     }
 }

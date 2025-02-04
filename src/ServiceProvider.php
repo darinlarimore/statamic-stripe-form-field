@@ -7,11 +7,10 @@ use Darinlarimore\StatamicStripeFormField\Fieldtypes\StripeForm;
 
 class ServiceProvider extends AddonServiceProvider
 {
-
     protected $vite = [
         'input' => [
-            'resources/js/main.js',
-            'resources/css/main.css'
+            'resources/js/cp.js',
+            'resources/css/cp.css',
         ],
         'publicDirectory' => 'resources/dist',
     ];
@@ -19,5 +18,9 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon()
     {
         StripeForm::register();
+
+        $this->publishes([
+            __DIR__.'/../resources/views/forms/fields' => resource_path('views/vendor/statamic-stripe-form-field/forms/fields'),
+        ], 'statamic-stripe-form-field-views');
     }
 }

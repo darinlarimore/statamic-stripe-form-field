@@ -8,7 +8,11 @@ export default defineConfig({
 	},
 	plugins: [
 		laravel({
-			input: ['resources/js/main.js', 'resources/css/main.css'],
+			input: [
+				'resources/js/cp.js',
+				'resources/css/cp.css',
+			],
+			refresh: true,
 			publicDirectory: 'resources/dist',
 		}),
 		vue(),

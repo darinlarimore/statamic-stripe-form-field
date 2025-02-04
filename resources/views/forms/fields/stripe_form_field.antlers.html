@@ -1,0 +1,69 @@
+<div>
+		<div id="payment-element">
+		</div>
+		<div id="error-message">
+		</div>
+	<input
+		id="{{ id }}"
+		type="{{ input_type ?? 'text' }}"
+		name="{{ handle }}"
+		value="{{ value }}"
+		{{ if placeholder }}placeholder="{{ placeholder }}"{{ /if }}
+		{{ if character_limit }}maxlength="{{ character_limit }}"{{ /if }}
+		{{ if autocomplete }}autocomplete="{{ autocomplete }}"{{ /if }}
+		{{ if js_driver }}{{ js_attributes }}{{ /if }}
+		{{ if validate|contains:required }}required{{ /if }}
+		{{ if error }}
+				aria-invalid="true" aria-describedby="{{ id }}-error"
+		{{ elseif instructions }}
+				aria-describedby="{{ id }}-instructions"
+		{{ /if }}
+	>
+
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const stripeScript = document.querySelector('script[src="https://js.stripe.com/v3/"]');
+		stripeScript.onload = function() {
+			const stripe = Stripe('{{api_key}}');
+			const options = {
+				mode: 'payment',
+				amount: {{amount * 100}},
+				currency: '{{currency|lower}}',
+				paymentMethodCreation: 'manual',
+			};
+
+			const elements = stripe.elements(options);
+
+			const paymentElementOptions = { layout: 'tabs'};
+			const paymentElement = elements.create('payment', paymentElementOptions);
+			paymentElement.mount('#payment-element');
+
+			paymentElement.on('change', async function(event) {
+				// Handle changes in the payment element
+				if (event.complete) {
+					elements.submit()
+					const {error, confirmationToken} = await stripe.createConfirmationToken({elements});
+					if (error) {
+						// This point is only reached if there's an immediate error when
+						// creating the ConfirmationToken. Show the error to your customer (for example, payment details incomplete)
+						handleError(error);
+						return;
+					}
+
+					// Append the ConfirmationToken to the form field
+					const input = document.getElementById('{{ id }}');
+					console.log(confirmationToken);
+					input.value = confirmationToken.id;
+				}
+			});
+
+			const handleError = (error) => {
+				const messageContainer = document.querySelector('#error-message');
+				messageContainer.textContent = error.message;
+				submitBtn.disabled = false;
+			};
+		};
+	});
+</script>
