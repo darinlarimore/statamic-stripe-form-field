@@ -1,6 +1,8 @@
-# Statamic Stripe Form Field
+# <img src="readmeAssets/icon.svg" height="50" width="50"> Statamic Stripe Form Field
 
 A Statamic addon that adds Stripe payment functionality to your forms.
+
+![Front End Example](/readmeAssets/frontendExample.png)
 
 ## Features
 - Seamless integration with Statamic forms
@@ -9,6 +11,7 @@ A Statamic addon that adds Stripe payment functionality to your forms.
 - Optional email receipts
 - Real-time card validation
 - Secure payment processing using Stripe Elements
+- Does not store any sensitive payment information, PCI compliant.
 
 ## Installation
 
@@ -18,6 +21,7 @@ composer require darinlarimore/statamic-stripe-form-field
 ```
 
 2. Add your Stripe API keys to your `.env` file:
+Visit the [Stripe Dashboard](https://dashboard.stripe.com/apikeys) to create API keys.
 ```
 STRIPE_PUBLISHABLE_KEY=your_publishable_key
 STRIPE_SECRET_KEY=your_secret_key
@@ -25,7 +29,8 @@ STRIPE_SECRET_KEY=your_secret_key
 
 ## Setup Field in a Form's Blueprint
 ![Stripe Payment](/readmeAssets/fieldType.png)
-Add an a "Stipe Payment" field to your form blueprint and configure the field settings.
+
+Add the "Stipe Payment" field to your form blueprint and configure the field settings.
 
 ### Field settings:
 - `Amount` (required): The amount to charge the customer.
