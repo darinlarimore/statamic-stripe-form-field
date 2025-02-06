@@ -14,9 +14,6 @@
         "statamic/cms": "^5.46",
         "stripe/stripe-php": "^16.5"
     },
-    "require-dev": {
-        "orchestra/testbench": "^9.0"
-    },
     "config": {
         "allow-plugins": {
             "pixelfear/composer-dist-plugin": true
