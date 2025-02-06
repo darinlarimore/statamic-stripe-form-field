@@ -3,8 +3,7 @@
 namespace Darinlarimore\StatamicStripeFormField;
 
 use Statamic\Providers\AddonServiceProvider;
-use Darinlarimore\StatamicStripeFormField\Fieldtypes\StripeForm;
-use Illuminate\Support\Facades\Route;
+use Darinlarimore\StatamicStripeFormField\Fieldtypes\StripePayment;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -18,6 +17,10 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        StripeForm::register();
+        StripePayment::register();
+
+        $this->publishes([
+            __DIR__.'/../resources/views/forms/fields' => resource_path('views/vendor/statamic-stripe-form-field/forms/fields'),
+        ], 'statamic-stripe-form-field-views');
     }
 }

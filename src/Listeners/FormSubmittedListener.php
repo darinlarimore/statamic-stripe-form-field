@@ -12,7 +12,7 @@ class FormSubmittedListener
     public function handle(FormSubmitted $event)
     {
         $field = $event->submission->form()->fields->first(function ($field) {
-            return $field->type() === 'stripe_form';
+            return $field->type() === 'stripe_payment';
         });
 
         $token = $event->submission->data()->get($field->handle());
