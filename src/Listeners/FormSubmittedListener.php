@@ -11,40 +11,27 @@ class FormSubmittedListener
 {
     public function handle(FormSubmitted $event)
     {
-
-        $form = $event->submission->form();
-        $fields = $form->fields->all();
-
-
-        $hasStripeField = collect($fields)->contains(function ($field) {
+        $field = $event->submission->form()->fields->first(function ($field) {
             return $field->type() === 'stripe_form';
         });
 
-        if ($hasStripeField) {
+        $token = $event->submission->data()->get($field->handle());
+
+        if ($field && $token) {
             $stripeService = new StripeService();
-            $field = $event->submission->form()->fields->first(function ($field) {
-                return $field->type() === 'stripe_form';
-            });
 
             $fieldConfig = $field->config();
 
             $fieldConfig = array_merge([
-                'payment_type' => $fieldConfig['payment_type'] ?? 'once_off',
-                'subscription_interval' => $fieldConfig['subscription_interval'] ?? 1,
-                'subscription_frequency' => $fieldConfig['subscription_frequency'] ?? 'month',
-                'payment_receipt' => $fieldConfig['payment_receipt'] ?? true,
-                'receipt_email_field_handle' => $fieldConfig['receipt_email_field_handle'] ?? null,
-                'payment_description' => $fieldConfig['payment_description'] ?? null,
-                'amount' => $fieldConfig['amount'] ?? null,
-                'fieldHandle' => $field->handle() ?? null,
+                'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
+                'description' => $fieldConfig['payment_description'] ?? '',
+                'amount' => $fieldConfig['amount'] ?? '',
+                'currency' => $fieldConfig['currency'] ?? 'USD',
+                'token' => $token ?? '',
             ]);
 
-            $stripeService->handleFormPayment($event->submission, $fieldConfig);
-
-
-            // Form::redirect($event->submission->form()->handle(), function (Submission $submission) {
-
-            // });
+            $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
+            $event->submission->data()->put('payment', $receiptUrl);
         }
     }
 }
