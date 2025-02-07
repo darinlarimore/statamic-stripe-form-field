@@ -1,4 +1,40 @@
-<div>
+<div x-init="() => {
+	const script = document.createElement('script');
+	script.src = 'https://js.stripe.com/v3/';
+	script.async = true;
+	document.head.appendChild(script);
+
+	script.onload = () => {
+		const stripe = Stripe('{{ api_key }}');
+		const elements = stripe.elements();
+		const card = elements.create('card');
+		card.mount('#payment-element');
+
+		card.on('change', async (event) => {
+			handleError('');
+			if (event.complete) {
+				const {token, error} = await stripe.createToken(card);
+
+				if (error) {
+					handleError(error.message);
+					return;
+				}
+
+				const input = document.getElementById('{{ id }}');
+				input.value = token.id
+			}
+
+			if (event.error) {
+				handleError(event.error.message);
+			}
+		});
+
+		const handleError = (error) => {
+			const messageContainer = document.querySelector('#error-message');
+			messageContainer.textContent = error;
+		};
+	};
+}">
 	<div id="payment-element"></div>
 	<div id="error-message" style="color: red;"></div>
 	<input
@@ -12,41 +48,3 @@
 		{{ /if }}
 	>
 </div>
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const stripeScript = document.querySelector('script[src="https://js.stripe.com/v3/"]');
-
-		stripeScript.onload = function() {
-			const stripe = Stripe('{{api_key}}');
-			const elements = stripe.elements();
-			const card = elements.create('card');
-			card.mount('#payment-element');
-
-			card.on('change', async function(event) {
-				handleError('');
-				if (event.complete) {
-
-					const {token, error} = await stripe.createToken(card);
-
-					if (error) {
-						handleError(error.message);
-						return;
-					}
-
-					const input = document.getElementById('{{ id }}');
-					input.value = token.id
-				}
-
-				if (event.error) {
-					handleError(event.error.message);
-				}
-			});
-
-			const handleError = (error) => {
-				const messageContainer = document.querySelector('#error-message');
-				messageContainer.textContent = error;
-			};
-		};
-	});
-</script>
