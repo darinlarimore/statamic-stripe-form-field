@@ -1,3 +1,3 @@
-import Fieldtype from './components/StripeFormField.vue'
+import Fieldtype from './components/StripePayment.vue'
 
-Statamic.$components.register('stripe_form-fieldtype', Fieldtype)
+Statamic.$components.register('stripe_payment-fieldtype', Fieldtype)
