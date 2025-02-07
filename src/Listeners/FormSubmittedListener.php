@@ -15,23 +15,25 @@ class FormSubmittedListener
             return $field->type() === 'stripe_payment';
         });
 
-        $token = $event->submission->data()->get($field->handle());
 
-        if ($field && $token) {
-            $stripeService = new StripeService();
+        if ($field) {
+            $token = $event->submission->data()->get($field->handle());
+            if ($token) {
+                $stripeService = new StripeService();
 
-            $fieldConfig = $field->config();
+                $fieldConfig = $field->config();
 
-            $fieldConfig = array_merge([
-                'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
-                'description' => $fieldConfig['payment_description'] ?? '',
-                'amount' => $fieldConfig['amount'] ?? '',
-                'currency' => $fieldConfig['currency'] ?? 'USD',
-                'token' => $token ?? '',
-            ]);
+                $fieldConfig = array_merge([
+                    'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
+                    'description' => $fieldConfig['payment_description'] ?? '',
+                    'amount' => $fieldConfig['amount'] ?? '',
+                    'currency' => $fieldConfig['currency'] ?? 'USD',
+                    'token' => $token ?? '',
+                ]);
 
-            $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
-            $event->submission->data()->put('payment', $receiptUrl);
+                $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
+                $event->submission->data()->put('payment', $receiptUrl);
+            }
         }
     }
 }
