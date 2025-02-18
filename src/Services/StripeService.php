@@ -21,22 +21,18 @@ class StripeService
 
     public function handleFormPayment($config): string
     {
-        try {
-            $config = (object) $config;
-            $receiptEmail = $config->receipt_email ? ['receipt_email' => $config->receipt_email] : [];
+        $config = (object) $config;
+        $receiptEmail = $config->receipt_email ? ['receipt_email' => $config->receipt_email] : [];
 
-            $charge = $this->client->charges->create([
-                'amount' => $this->toStripeAmount($config->amount, $config->currency),
-                'currency' => strtolower($config->currency),
-                'description' => $config->description,
-                'source' => $config->token,
-                ...$receiptEmail,
-            ]);
+        $charge = $this->client->charges->create([
+            'amount' => $this->toStripeAmount($config->amount, $config->currency),
+            'currency' => strtolower($config->currency),
+            'description' => $config->description,
+            'source' => $config->token,
+            ...$receiptEmail,
+        ]);
 
-            return $charge->receipt_url;
-        } catch (ApiErrorException $error) {
-            throw new \Exception("Payment failed: {$error->getMessage()}");
-        }
+        return $charge->receipt_url;
     }
 
     private function toStripeAmount(float $amount, string $currency): float

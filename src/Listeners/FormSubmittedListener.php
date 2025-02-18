@@ -3,10 +3,8 @@
 namespace Darinlarimore\StatamicStripeFormField\Listeners;
 
 use Statamic\Events\FormSubmitted;
-use Statamic\Facades\Form;
-use Statamic\Forms\Submission;
-use Darinlarimore\StatamicStripeFormField\Services\StripeService;
-
+use Darinlarimore\StatamicStripeFormField\Services\StripeService;;
+use Illuminate\Validation\ValidationException;
 class FormSubmittedListener
 {
     public function handle(FormSubmitted $event)
@@ -19,20 +17,24 @@ class FormSubmittedListener
         if ($field) {
             $token = $event->submission->data()->get($field->handle());
             if ($token) {
-                $stripeService = new StripeService();
+                try {
+                    $stripeService = new StripeService();
 
-                $fieldConfig = $field->config();
+                    $fieldConfig = $field->config();
 
-                $fieldConfig = array_merge([
-                    'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
-                    'description' => $fieldConfig['payment_description'] ?? '',
-                    'amount' => $fieldConfig['amount'] ?? '',
-                    'currency' => $fieldConfig['currency'] ?? 'USD',
-                    'token' => $token ?? '',
-                ]);
+                    $fieldConfig = array_merge([
+                        'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
+                        'description' => $fieldConfig['payment_description'] ?? '',
+                        'amount' => $fieldConfig['amount'] ?? '',
+                        'currency' => $fieldConfig['currency'] ?? 'USD',
+                        'token' => $token ?? '',
+                    ]);
 
-                $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
-                $event->submission->data()->put('payment', $receiptUrl);
+                    $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
+                    $event->submission->data()->put('payment', $receiptUrl);
+                } catch (\Throwable $th) {
+                    throw ValidationException::withMessages([$th->getMessage()]);
+                }
             }
         }
     }
