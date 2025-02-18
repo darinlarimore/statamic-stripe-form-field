@@ -13,7 +13,6 @@ class FormSubmittedListener
             return $field->type() === 'stripe_payment';
         });
 
-
         if ($field) {
             $token = $event->submission->data()->get($field->handle());
             if ($token) {
