@@ -37,9 +37,12 @@
         "pestphp/pest": "*",
         "pestphp/pest-plugin-laravel": "*",
         "mockery/mockery": "*",
-        "orchestra/testbench": "^9.0"
+        "orchestra/testbench": "^9.0",
+        "laravel/pint": "^1.26"
     },
     "scripts": {
-        "test": "vendor/bin/pest"
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint",
+        "format:check": "vendor/bin/pint --test"
     }
 }

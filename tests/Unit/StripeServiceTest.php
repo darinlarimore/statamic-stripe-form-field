@@ -3,13 +3,13 @@
 use Darinlarimore\StatamicStripeFormField\Services\StripeService;
 
 it('initializes with stripe client', function () {
-    $service = new StripeService();
+    $service = new StripeService;
 
     expect($service)->toBeInstanceOf(StripeService::class);
 });
 
 it('converts standard currency amounts correctly', function () {
-    $service = new StripeService();
+    $service = new StripeService;
     $reflection = new ReflectionClass($service);
     $method = $reflection->getMethod('toStripeAmount');
     $method->setAccessible(true);
@@ -22,7 +22,7 @@ it('converts standard currency amounts correctly', function () {
 });
 
 it('converts zero-decimal currency amounts correctly', function () {
-    $service = new StripeService();
+    $service = new StripeService;
     $reflection = new ReflectionClass($service);
     $method = $reflection->getMethod('toStripeAmount');
     $method->setAccessible(true);
@@ -35,7 +35,7 @@ it('converts zero-decimal currency amounts correctly', function () {
 });
 
 it('handles all zero-decimal currencies', function () {
-    $service = new StripeService();
+    $service = new StripeService;
     $reflection = new ReflectionClass($service);
     $method = $reflection->getMethod('toStripeAmount');
     $method->setAccessible(true);

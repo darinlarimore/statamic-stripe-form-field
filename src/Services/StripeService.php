@@ -3,13 +3,10 @@
 namespace Darinlarimore\StatamicStripeFormField\Services;
 
 use Stripe\StripeClient;
-use Stripe\Exception\ApiErrorException;
 
 class StripeService
 {
     private StripeClient $client;
-
-
 
     public function __construct()
     {
@@ -38,7 +35,7 @@ class StripeService
     private function toStripeAmount(float $amount, string $currency): float
     {
         // https://stripe.com/docs/currencies#zero-decimal
-        $zeroDecimalCurrencies = ['BIF','CLP','DJF','GNF','JPY','KMF','KRW','MGA','PYG','RWF','UGX','VND','VUV','XAF','XOF','XPF'];
+        $zeroDecimalCurrencies = ['BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'];
 
         if (in_array(strtoupper($currency), $zeroDecimalCurrencies)) {
             return (int) $amount;

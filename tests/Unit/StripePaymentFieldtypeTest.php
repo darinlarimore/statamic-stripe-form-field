@@ -3,7 +3,7 @@
 use Darinlarimore\StatamicStripeFormField\Fieldtypes\StripePayment;
 
 it('has correct icon', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $iconProperty = $reflection->getProperty('icon');
@@ -13,7 +13,7 @@ it('has correct icon', function () {
 });
 
 it('is categorized as special', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $categoriesProperty = $reflection->getProperty('categories');
@@ -23,7 +23,7 @@ it('is categorized as special', function () {
 });
 
 it('is selectable in forms', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $selectableProperty = $reflection->getProperty('selectableInForms');
@@ -33,7 +33,7 @@ it('is selectable in forms', function () {
 });
 
 it('has correct keywords', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $keywordsProperty = $reflection->getProperty('keywords');
@@ -47,7 +47,7 @@ it('has correct keywords', function () {
 });
 
 it('returns correct view name', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     expect($fieldtype->view())->toBe('statamic-stripe-form-field::forms.fields.stripe_form_field');
 });
@@ -55,7 +55,7 @@ it('returns correct view name', function () {
 it('provides stripe api key in extra renderable data', function () {
     config(['statamic-stripe-form-field.key' => 'pk_test_example']);
 
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
     $data = $fieldtype->extraRenderableFieldData();
 
     expect($data)->toHaveKey('api_key')
@@ -63,7 +63,7 @@ it('provides stripe api key in extra renderable data', function () {
 });
 
 it('has amount config field', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $method = $reflection->getMethod('configFieldItems');
@@ -77,7 +77,7 @@ it('has amount config field', function () {
 });
 
 it('has currency config field', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $method = $reflection->getMethod('configFieldItems');
@@ -91,7 +91,7 @@ it('has currency config field', function () {
 });
 
 it('has payment description config field', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $method = $reflection->getMethod('configFieldItems');
@@ -103,7 +103,7 @@ it('has payment description config field', function () {
 });
 
 it('has receipt email field handle config field', function () {
-    $fieldtype = new StripePayment();
+    $fieldtype = new StripePayment;
 
     $reflection = new ReflectionClass($fieldtype);
     $method = $reflection->getMethod('configFieldItems');

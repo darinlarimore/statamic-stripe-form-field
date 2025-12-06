@@ -2,9 +2,10 @@
 
 namespace Darinlarimore\StatamicStripeFormField\Listeners;
 
-use Statamic\Events\FormSubmitted;
-use Darinlarimore\StatamicStripeFormField\Services\StripeService;;
+use Darinlarimore\StatamicStripeFormField\Services\StripeService;
 use Illuminate\Validation\ValidationException;
+use Statamic\Events\FormSubmitted;
+
 class FormSubmittedListener
 {
     public function handle(FormSubmitted $event)
@@ -17,12 +18,12 @@ class FormSubmittedListener
             $token = $event->submission->data()->get($field->handle());
             if ($token) {
                 try {
-                    $stripeService = new StripeService();
+                    $stripeService = new StripeService;
 
                     $fieldConfig = $field->config();
 
                     $fieldConfig = array_merge([
-                        'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? '') ,
+                        'receipt_email' => $event->submission->data()->get($fieldConfig['receipt_email_field_handle'] ?? ''),
                         'description' => $fieldConfig['payment_description'] ?? '',
                         'amount' => $fieldConfig['amount'] ?? '',
                         'currency' => $fieldConfig['currency'] ?? 'USD',
