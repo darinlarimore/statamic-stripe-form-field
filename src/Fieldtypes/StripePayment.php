@@ -38,7 +38,7 @@ class StripePayment extends Fieldtype
                     'numeric',
                     'min:0',
                     'max:99999.99',
-                    'required'
+                    'required',
                 ],
             ],
             'currency' => [

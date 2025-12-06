@@ -2,8 +2,8 @@
 
 namespace Darinlarimore\StatamicStripeFormField;
 
-use Statamic\Providers\AddonServiceProvider;
 use Darinlarimore\StatamicStripeFormField\Fieldtypes\StripePayment;
+use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
