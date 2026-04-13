@@ -16,6 +16,7 @@ function statamicExternals() {
                             globals: {
                                 vue: 'Vue',
                             },
+                            banner: 'if (window.__STATAMIC__) { window.Fieldtype = window.__STATAMIC__.core.FieldtypeMixin; }',
                         },
                     },
                 },
@@ -28,7 +29,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/js/cp.js'],
-            refresh: true,
             publicDirectory: 'resources/dist',
         }),
         vue(),
