@@ -1,20 +1,37 @@
-import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
-import vue from '@vitejs/plugin-vue2'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
+
+function statamicExternals() {
+    return {
+        name: 'statamic-externals',
+        config() {
+            return {
+                build: {
+                    rollupOptions: {
+                        external: ['vue'],
+                        output: {
+                            format: 'iife',
+                            inlineDynamicImports: true,
+                            globals: {
+                                vue: 'Vue',
+                            },
+                            banner: 'if (window.__STATAMIC__) { window.Fieldtype = window.__STATAMIC__.core.FieldtypeMixin; }',
+                        },
+                    },
+                },
+            };
+        },
+    };
+}
 
 export default defineConfig({
-	server: {
-		cors: { origin: "*" },
-	},
-	plugins: [
-		laravel({
-			input: [
-				'resources/js/cp.js',
-				'resources/css/cp.css',
-			],
-			refresh: true,
-			publicDirectory: 'resources/dist',
-		}),
-		vue(),
-	],
-})
+    plugins: [
+        laravel({
+            input: ['resources/js/cp.js'],
+            publicDirectory: 'resources/dist',
+        }),
+        vue(),
+        statamicExternals(),
+    ],
+});

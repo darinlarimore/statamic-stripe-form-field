@@ -1,3 +1,6 @@
+import '../css/cp.css'
 import Fieldtype from './components/StripePayment.vue'
 
-Statamic.$components.register('stripe_payment-fieldtype', Fieldtype)
+Statamic.booting(() => {
+	Statamic.$components.register('stripe_payment-fieldtype', Fieldtype)
+})
