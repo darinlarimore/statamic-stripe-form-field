@@ -7,7 +7,15 @@
 	script.onload = () => {
 		const stripe = Stripe('{{ api_key }}');
 		const elements = stripe.elements();
-		const card = elements.create('card');
+		const isDark = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const card = elements.create('card', {
+			style: {
+				base: {
+					color: isDark ? '#ffffff' : '#1a1b21',
+					'::placeholder': { color: isDark ? '#9ca3af' : '#6b7280' },
+				},
+			},
+		});
 		card.mount('#payment-element');
 
 		card.on('change', async (event) => {
