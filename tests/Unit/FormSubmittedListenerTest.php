@@ -3,10 +3,11 @@
 use Darinlarimore\StatamicStripeFormField\Listeners\FormSubmittedListener;
 use Darinlarimore\StatamicStripeFormField\Services\StripeService;
 use Illuminate\Validation\ValidationException;
+use Mockery\MockInterface;
 use Statamic\Contracts\Forms\Submission;
 use Statamic\Events\FormSubmitted;
 
-function makeField(string $type, string $handle = 'payment', array $config = []): Mockery\MockInterface
+function makeField(string $type, string $handle = 'payment', array $config = []): MockInterface
 {
     $field = Mockery::mock();
     $field->shouldReceive('type')->andReturn($type);
