@@ -8,6 +8,8 @@ use Statamic\Events\FormSubmitted;
 
 class FormSubmittedListener
 {
+    public function __construct(private StripeService $stripeService) {}
+
     public function handle(FormSubmitted $event)
     {
         $field = $event->submission->form()->fields->first(function ($field) {
@@ -18,8 +20,6 @@ class FormSubmittedListener
             $token = $event->submission->data()->get($field->handle());
             if ($token) {
                 try {
-                    $stripeService = new StripeService;
-
                     $fieldConfig = $field->config();
 
                     $fieldConfig = array_merge([
@@ -30,7 +30,7 @@ class FormSubmittedListener
                         'token' => $token ?? '',
                     ]);
 
-                    $receiptUrl = $stripeService->handleFormPayment($fieldConfig);
+                    $receiptUrl = $this->stripeService->handleFormPayment($fieldConfig);
                     $event->submission->data()->put('payment', $receiptUrl);
                 } catch (\Throwable $th) {
                     throw ValidationException::withMessages([$th->getMessage()]);
