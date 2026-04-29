@@ -108,7 +108,7 @@ it('wraps stripe errors in ValidationException', function () {
 
     $this->stripeService
         ->shouldReceive('handleFormPayment')
-        ->andThrow(new \Exception('Your card was declined.'));
+        ->andThrow(new Exception('Your card was declined.'));
 
     expect(fn () => $this->listener->handle($event))
         ->toThrow(ValidationException::class);
