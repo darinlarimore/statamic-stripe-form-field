@@ -1,5 +1,6 @@
 {
     "name": "darinlarimore/statamic-stripe-form-field",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Darinlarimore\\StatamicStripeFormField\\": "src"
